@@ -37,6 +37,18 @@ def client_thread(conn, addr):
 
     conn.close()
 
+def matchmaker():
+    while True:
+        with lock:
+            if len(waiting_pvp) >= 2:
+                c1, n1 = waiting_pvp.pop(0)
+                c2, n2 = waiting_pvp.pop(0)
+                threading.Thread(
+                    target=handle_pvp_room,
+                    args=(c1, n1, c2, n2),
+                    daemon=True
+                ).start()
+        time.sleep(0.2)
 
 def main():
     threading.Thread(target=matchmaker, daemon=True).start()
