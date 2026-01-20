@@ -1,15 +1,14 @@
-HOST = '127.0.0.1'          
-PORT = 65432              
+import os
 
-CHOICES = ['rock', 'paper', 'scissors']                    
+SERVER_HOST = "127.0.0.1"
+PORT = 65432
 
-CHOICES_VN = {                                           
-    'rock': 'Búa',
-    'paper': 'Bao',
-    'scissors': 'Kéo'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSETS_DIR = os.path.join(BASE_DIR, "assets")
+
+CHOICES = ["rock", "paper", "scissors"]
+CHOICES_VN = {
+    "rock": "Búa",
+    "paper": "Bao",
+    "scissors": "Kéo"
 }
-
-VALID_MODES = ['1', '2']                                   
-
-APP_NAME = "Búa - Bao - Kéo Multiplayer"
-APP_VERSION = "1.5.0"                                    
