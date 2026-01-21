@@ -11,7 +11,7 @@ def play_pve(conn, username):
     send(conn, "SYS:MATCH_START")
     send(conn, "TEXT:PvE – Chơi với máy")
 
-    while True:
+   while True:
         send(conn, "SYS:ASK_MOVE")
         choice = recv_line(conn)
 
@@ -27,15 +27,3 @@ def play_pve(conn, username):
         send(conn, f"OPPONENT_CHOICE:{bot}")
 
         result, _ = determine_winner(choice, bot)
-
-        if result == "p1":
-            score += 1
-            update_score(username, 1)
-            send(conn, "EFFECT:WIN")
-        elif result == "p2":
-            send(conn, "EFFECT:LOSE")
-        else:
-            send(conn, "EFFECT:DRAW")
-
-        send(conn, f"TEXT:Bạn {format_choice(choice)} – Máy {format_choice(bot)}")
-        send(conn, "COUNTDOWN:3")
