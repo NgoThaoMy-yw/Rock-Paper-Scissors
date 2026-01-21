@@ -40,3 +40,40 @@ def _save_leaderboard_unlocked(data: dict):
         shutil.move(tmp_path, LEADERBOARD_FILE)
     except Exception as e:
         log(f"[Leaderboard] Lỗi ghi file: {e}")
+
+def load_leaderboard() -> dict:
+    with leaderboard_lock:
+        return _load_leaderboard_unlocked()
+
+def save_leaderboard(data: dict):
+    with leaderboard_lock:
+        _save_leaderboard_unlocked(data)
+
+def update_score(username: str, delta: int):
+    if not username:
+        return
+
+    username = username.strip()
+    if not username or username.lower() == "guest":
+        return
+
+    with leaderboard_lock:
+        leaderboard = _load_leaderboard_unlocked()
+        old_score = leaderboard.get(username, 0)
+        new_score = old_score + int(delta)
+        leaderboard[username] = new_score
+        _save_leaderboard_unlocked(leaderboard)
+
+    sign = "+" if delta > 0 else ""
+    log(f"[Leaderboard] {username} {sign}{delta} ({old_score} -> {new_score})")
+
+def get_top_players(n: int = 10):
+    with leaderboard_lock:
+        leaderboard = _load_leaderboard_unlocked()
+
+    if not leaderboard:
+        return []
+
+    return sorted(
+        leaderboard.items(), key=lambda x: x[1], reverse=True
+    )[:n]
