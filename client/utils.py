@@ -13,4 +13,3 @@ def recv_line(sock):
         return line
     except (ConnectionAbortedError, ConnectionResetError, OSError):
         return None
-
